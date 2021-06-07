@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Header from '../components/header'
 import { useCount, useDispatchCount } from '../components/Counter'
 
 const IndexPage = () => {
@@ -16,8 +17,8 @@ const IndexPage = () => {
 
   return (
     <>
-      <h1>HOME</h1>
-      <p>Counter: {count}</p>
+      <Header />
+      
       <button onClick={handleIncrease}>Increase</button>
       <button onClick={handleDecrease}>Decrease</button>
       <p>
