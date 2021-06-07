@@ -11,5 +11,11 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/react": "^11.2.7",
+    "babel-jest": "^27.0.2",
+    "jest": "^27.0.4"
+  }
 }
