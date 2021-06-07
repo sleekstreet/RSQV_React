@@ -1,4 +1,5 @@
 import App from 'next/app'
+import 'tailwindcss/tailwind.css'
 import { CounterProvider } from '../components/Counter'
 
 class MyApp extends App {
