@@ -3,3 +3,12 @@
   border-width:1px;
   padding:5px;
 }
+.QuoteList li span{
+  border-color:#333;
+  border-width:1px;
+  padding:2px 5px;
+  margin:0 5px;
+}
+.QuoteList li q{
+  margin-left:10px;
+}
