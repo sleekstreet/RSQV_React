@@ -3,7 +3,7 @@ import Header from '../components/header'
 import react, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
-import { useCount, useDispatchCount } from '../components/Counter'
+// import { useCount, useDispatchCount } from '../components/Counter'
 
 export async function getStaticProps(context) {
   // const state = useCount()
@@ -20,9 +20,9 @@ const ListCard = (props) => {
   // console.log(props.index)
   return ( 
     <li>
-      <button onClick={() => props.handleIncrease(props.index)}><FontAwesomeIcon icon={"fa-thumbs-up"} /></button>
+      <button onClick={() => props.handleIncrease(props.index)}><FontAwesomeIcon icon={faThumbsUp} /></button>
       <span>{props.votes}</span>
-      <button onClick={() => props.handleDecrease(props.index)}><FontAwesomeIcon icon={"fa-thumbs-down"} /></button>
+      <button onClick={() => props.handleDecrease(props.index)}><FontAwesomeIcon icon={faThumbsDown} /></button>
       <q><em>{props.quote}</em></q>
     </li>
   )
@@ -53,18 +53,14 @@ const List = (props) => {
 export default function IndexPage(props){
   const [quoteQty, setQuoteQty] = useState(0);
   const [voteQty, setVoteQty] = useState(0)
+  const [light, setLight] = useState(true)
   const [votesArr, setVotesArr] = useState(props.quotes.length > 0 ? new Array(props.quotes.length).fill(0) : [0]);
 
-  // useEffect(() => {
-    
-  // })
-  const dispatch = useDispatchCount()
-  const state = useCount()
+  // const dispatch = useDispatchCount()
+  // const state = useCount()
   function handleIncrease(index){
     setVoteQty(voteQty + 1)
-    console.log(`quote space: ${index} old amount ${votesArr[index]} typeof ${typeof votesArr[index]}`)
     votesArr[index]=votesArr[index]+1
-    console.log(`new array ${votesArr}`)
     setVotesArr(votesArr)
   }
   function handleDecrease(index){
@@ -72,16 +68,20 @@ export default function IndexPage(props){
     votesArr[index]=votesArr[index]-1
     setVotesArr(votesArr)
   }
-  const updateQuotes = (event) => 
-    dispatch({
-      type: "UPDATE_QUOTES",
-    });
+  function toggleMode(){
+    setLight(!light)
+  }
+  function updateQuotes(event){}
+    
   return (
     <>
+      <div className={`${light ? 'dark' : ''}`}>
       <Header 
         VoteQty = {voteQty} 
         QuoteCount = {quoteQty}
+        light = {light}
         updateQuotesArr = {() => updateQuotes()}
+        toggleMode = {() => toggleMode()}
       />
       <List 
         Quotes = {props.quotes} 
@@ -94,6 +94,7 @@ export default function IndexPage(props){
           <a>About</a>
         </Link>
       </p>
+      </div>
     </>
   )
 }
