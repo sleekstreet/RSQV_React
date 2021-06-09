@@ -1,16 +1,18 @@
 /**
  * @jest-environment jsdom
  */
-import Enzyme, { shallow, render, mount } from 'enzyme';
+import Enzyme, { shallow, render, mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 // Using render and screen from test-utils.js instead of
 // @testing-library/react
-// import { render, screen, fireEvent, cleanup } from "./test-utils";
+// import { fireEvent, cleanup } from "./test-utils";
 import IndexPage from "@pages/index";
+import Header from "@components/header";
+import ListCard from '@components/listCard';
 
-Enzyme.configure({ adapter: new Adapter() })
+configure({ adapter: new Adapter() })
 const props = {
-  "Quotes": [
+  quotes: [
     "Strippers do nothing for me…but I will take a free breakfast buffet anytime, anyplace.",
     "Any dog under fifty pounds is a cat and cats are useless.",
     "What's cholesterol?",
@@ -62,40 +64,51 @@ const props = {
     "There are three acceptable haircuts: high and tight, crew cut, buzz cut.",
     "It's an impossible puzzle, and I love puzzles!"
   ],
-  "votes": [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  "QuoteCount": 10,
-  "handleIncrease": "ƒ handleIncrease() {}",
-  "handleDecrease": "ƒ handleDecrease() {}"
+  voteQty: 10,
+  votes: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  QuoteCount: 10,
 }
 describe("HomePage Tests", () => {
+  // beforeEach()
   // afterEach(cleanup);
 
-  it("Loading homepage", () => {
-    const wrapper = mount(<IndexPage />)
-    expect(wrapper.instance().state.votesArr.length).toBe([50])
+  it("Loading homepage received payload", () => {
+    const wrapper = mount(<IndexPage quotes={props.quotes}/>)
+    expect(wrapper.props()).toEqual({ quotes: props.quotes });
+  })
+  it("Then the correct amount of quotes are produced through the List and List Card Components", () => {
+    const wrapper = mount(<IndexPage quotes={props.quotes} />)
+    expect(wrapper.find('ListCard').length).toBe(50);
   })
   
   it("Increment vote test", () => {
-    const wrapper = mount(<IndexPage />)
-    expect(wrapper.instance().state.votesArr).toBe(this.props.votesArr)
-    wrapper.instance().handleIncrease(3)
-    expect(wrapper.instance().state.votesArr).toBe([0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+    const wrapper = mount(<IndexPage quotes={props.quotes} />)
+    expect(wrapper.find('ListCard').at(3).find('span').text()).toBe("0")
+    wrapper.find('ListCard').at(3).find('button').first().simulate('click')
+    expect(wrapper.find('ListCard').at(3).find('span').text()).toBe("1")
+    wrapper.find('ListCard').at(3).find('button').first().simulate('click')
+    expect(wrapper.find('ListCard').at(3).find('span').text()).toBe("2")
   })
   it("Decrement votes test", () => {
-    const wrapper = mount(<IndexPage />)
-    expect(wrapper.instance().state.votesArr).toBe(this.props.votesArr)
-    wrapper.instance().handleDecrease(3)
-    expect(wrapper.instance().state.votesArr).toBe([0,0,0,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+    const wrapper = mount(<IndexPage quotes={props.quotes} />)
+    expect(wrapper.find('ListCard').at(3).find('span').text()).toBe("0")
+    wrapper.find('ListCard').at(3).find('button').at(1).simulate('click')
+    expect(wrapper.find('ListCard').at(3).find('span').text()).toBe("-1")
+    wrapper.find('ListCard').at(3).find('button').at(1).simulate('click')
+    expect(wrapper.find('ListCard').at(3).find('span').text()).toBe("-2")
   })
 });
 describe("Header Tests", () => {
-  // afterEach(cleanup);
   it("Header renders correctly", () => {
-    render(<IndexPage />)
-    const heading = screen.getByText(
-      /Ron Swanson Quote Voter/i
-    )
-    expect(heading).toBeInTheDocument();
-  
+    const container = render(<Header VoteQty = {props.voteQty} />)
+    expect(container.find('h1').text()).toEqual('Ron Swanson Quote Voter');
+    expect(container.find('.totalVotes').text()).toEqual('Total Votes: 10');
+  })
+  it("Then test Dark mode toggle", () => {
+    const wrapper = mount(<IndexPage quotes={props.quotes} /> )
+    expect(wrapper.hasClass('dark')).toEqual(false);
+    wrapper.find('Header').find('button').simulate('click')
+    expect(wrapper.find('div').first().hasClass('dark')).toEqual(true);
+    expect(wrapper.find('Header').find('button').find('svg').hasClass('svg-inline--fa fa-toggle-on fa-w-18')).toEqual(true)
   })
 })

@@ -17,9 +17,10 @@ export async function getStaticProps(context) {
 }
 
 export default function IndexPage(props){
+  // console.log(`Incomming Props: ${props.quotes}`)
   const [quoteQty, setQuoteQty] = useState(10);
   const [voteQty, setVoteQty] = useState(0)
-  const [light, setLight] = useState(true)
+  const [light, setLight] = useState(false)
   const [votesArr, setVotesArr] = useState(props.quotes.length > 0 ? new Array(props.quotes.length).fill(0) : [0]);
 
   // const dispatch = useDispatchCount()
