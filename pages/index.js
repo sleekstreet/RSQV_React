@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import Header from '../components/header'
-import react, { useState, useEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import List from '../components/list'
+import react, { useState } from 'react'
 // import { useCount, useDispatchCount } from '../components/Counter'
 
 export async function getStaticProps(context) {
@@ -16,42 +15,9 @@ export async function getStaticProps(context) {
     }
   }
 }
-const ListCard = (props) => {
-  // console.log(props.index)
-  return ( 
-    <li>
-      <button onClick={() => props.handleIncrease(props.index)}><FontAwesomeIcon icon={faThumbsUp} /></button>
-      <span>{props.votes}</span>
-      <button onClick={() => props.handleDecrease(props.index)}><FontAwesomeIcon icon={faThumbsDown} /></button>
-      <q><em>{props.quote}</em></q>
-    </li>
-  )
-}
-const List = (props) => {
-  const Quotes = props.Quotes;
-  const handleIncrease = (index) => {
-    props.handleIncrease(index)
-  }
-  const listQuotes = Quotes.map((quote, index) => {
-    return (
-      <ListCard 
-        quote = {quote} 
-        key = {index}  
-        index = {index}
-        votes = {props.votes[index]}
-        handleDecrease = {(index) => props.handleDecrease(index)}
-        handleIncrease = {(index) => handleIncrease(index)}
-      />
-    )
-    
-  })
-  return (
-    <ul className="QuoteList mx-4 my-2 text-xs text-gray-400">{listQuotes}</ul>
-  )
-}
 
 export default function IndexPage(props){
-  const [quoteQty, setQuoteQty] = useState(0);
+  const [quoteQty, setQuoteQty] = useState(10);
   const [voteQty, setVoteQty] = useState(0)
   const [light, setLight] = useState(true)
   const [votesArr, setVotesArr] = useState(props.quotes.length > 0 ? new Array(props.quotes.length).fill(0) : [0]);
@@ -86,14 +52,11 @@ export default function IndexPage(props){
       <List 
         Quotes = {props.quotes} 
         votes = {votesArr}
+        QuoteCount = {quoteQty}
         handleIncrease = {(index) => handleIncrease(index)}
         handleDecrease = {(index) => handleDecrease(index)}
       />
-      <p>
-        <Link href="/about">
-          <a>About</a>
-        </Link>
-      </p>
+      
       </div>
     </>
   )
