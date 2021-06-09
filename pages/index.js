@@ -42,21 +42,20 @@ export default function IndexPage(props){
   return (
     <>
       <div className={`${light ? 'dark' : ''}`}>
-      <Header 
-        VoteQty = {voteQty} 
-        QuoteCount = {quoteQty}
-        light = {light}
-        updateQuotesArr = {() => updateQuotes()}
-        toggleMode = {() => toggleMode()}
-      />
-      <List 
-        Quotes = {props.quotes} 
-        votes = {votesArr}
-        QuoteCount = {quoteQty}
-        handleIncrease = {(index) => handleIncrease(index)}
-        handleDecrease = {(index) => handleDecrease(index)}
-      />
-      
+        <Header 
+          VoteQty = {voteQty} 
+          QuoteCount = {quoteQty}
+          light = {light}
+          updateQuotesArr = {() => updateQuotes()}
+          toggleMode = {() => toggleMode()}
+        />
+        <List 
+          Quotes = {props.quotes} 
+          votes = {votesArr}
+          QuoteCount = {quoteQty}
+          handleIncrease = {(index) => handleIncrease(index)}
+          handleDecrease = {(index) => handleDecrease(index)}
+        />
       </div>
     </>
   )
