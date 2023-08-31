@@ -1,30 +1,19 @@
 import Link from 'next/link'
 import Header from '../components/header'
 import List from '../components/list'
-import react, { useState } from 'react'
-// import { useCount, useDispatchCount } from '../components/Counter'
+import { useEffect, useState } from 'react'
 
-export async function getStaticProps(context) {
-  // const state = useCount()
-  const res = await fetch(`http://ron-swanson-quotes.herokuapp.com/v2/quotes/50`); // do something with the action
-  const quotes = await res.json()
 
-  return {
-    props: {
-      quotes
-    }
-  }
-}
-
-export default function IndexPage(props){
+export default function IndexPage(){
   // console.log(`Incomming Props: ${props.quotes}`)
-  const [quoteQty, setQuoteQty] = useState(10);
+  const [quoteArr, setQuoteArr] = useState([])
+  const [quoteQty, setQuoteQty] = useState(50)
   const [voteQty, setVoteQty] = useState(0)
   const [light, setLight] = useState(false)
-  const [votesArr, setVotesArr] = useState(props.quotes.length > 0 ? new Array(props.quotes.length).fill(0) : [0]);
+  const [loading, setLoading] =useState(true)
+  const [votesArr, setVotesArr] = useState(quoteQty > 0 ? new Array(quoteQty).fill(0) : [0])
 
-  // const dispatch = useDispatchCount()
-  // const state = useCount()
+
   function handleIncrease(index){
     setVoteQty(voteQty + 1)
     votesArr[index]=votesArr[index]+1
@@ -38,8 +27,25 @@ export default function IndexPage(props){
   function toggleMode(){
     setLight(!light)
   }
-  function updateQuotes(event){}
+  function updateQuotes(count){
+    setQuoteQty(count)
+    setLoading(true)
+  }
+  
+  useEffect(() => {
+   
+    fetch(`http://ron-swanson-quotes.herokuapp.com/v2/quotes/${quoteQty}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setQuoteArr(data)
+        setLoading(false)
+      }); 
     
+  }, [quoteQty])
+
+  if(loading) return <p>Loading...</p>
+  if(quoteArr.length < 1) return <p>No data is currently provided</p>
+
   return (
     <>
       <div className={`${light ? 'dark' : ''}`}>
@@ -47,11 +53,11 @@ export default function IndexPage(props){
           VoteQty = {voteQty} 
           QuoteCount = {quoteQty}
           light = {light}
-          updateQuotesArr = {() => updateQuotes()}
+          updateQuotesCount = {(count) => updateQuotes(count)}
           toggleMode = {() => toggleMode()}
         />
         <List 
-          Quotes = {props.quotes} 
+          Quotes = {quoteArr} 
           votes = {votesArr}
           QuoteCount = {quoteQty}
           handleIncrease = {(index) => handleIncrease(index)}
