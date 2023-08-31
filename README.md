@@ -1,14 +1,12 @@
-# Hello World example
+# Ron Swanson Quote Voter React Example
 
-This example shows how to use react context api in our app.
+This example shows how I would use react to create a simple quote voter app. This example uses react next.js framework.
 
-It provides an example of using `pages/_app.js` to include the context api provider and then shows how both the `pages/index.js` and `pages/about.js` can both share the same data using the context api consumer.
+The bulk of the example is located on the main index page `pages/index.js`. All of the components are located in the component folder. 
 
-We start off by creating two contexts. One that actually never changes (`CounterDispatchContext`) and one that changes more often (`CounterStateContext`).
+The latest updates to this example is controling the amount of quotes that are available to this small grid by using the select dropdown in the header. The next updates for this example will be some adding some stylings to make this example look nice. 
 
-The `pages/index.js` shows how to, from the home page, increment and decrement the context data by 1 (a hard code value in the context provider itself).
 
-The `pages/about.js` shows how to pass an increment value from the about page into the context provider itself.
 
 ## Deploy your own
 
